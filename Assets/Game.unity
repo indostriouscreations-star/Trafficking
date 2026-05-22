@@ -596,6 +596,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: triggerPoint
+      value: 
+      objectReference: {fileID: 674512628}
+    - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: carLayer.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
       propertyPath: triggerDistance
       value: 4.78
       objectReference: {fileID: 0}
@@ -604,9 +612,41 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 674512628}
     - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: checkZones.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
       propertyPath: checkPoints.Array.size
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: checkZones.Array.data[0].point
+      value: 
+      objectReference: {fileID: 1984238523}
+    - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: checkZones.Array.data[1].point
+      value: 
+      objectReference: {fileID: 1541504672}
+    - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: checkZones.Array.data[2].point
+      value: 
+      objectReference: {fileID: 1607311345}
+    - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: checkZones.Array.data[3].point
+      value: 
+      objectReference: {fileID: 502967972}
+    - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: checkZones.Array.data[4].point
+      value: 
+      objectReference: {fileID: 555472217}
+    - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: checkZones.Array.data[5].point
+      value: 
+      objectReference: {fileID: 1941889749}
+    - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: checkZones.Array.data[6].point
+      value: 
+      objectReference: {fileID: 579604284}
     - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
       propertyPath: checkPoints.Array.data[0].point
       value: 
@@ -640,6 +680,38 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 579604284}
     - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: checkZones.Array.data[0].radius
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: checkZones.Array.data[1].radius
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: checkZones.Array.data[2].radius
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: checkZones.Array.data[3].radius
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: checkZones.Array.data[4].radius
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: checkZones.Array.data[5].radius
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: checkZones.Array.data[6].radius
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: checkZones.Array.data[7].radius
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 384546449772933053, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
       propertyPath: checkPoints.Array.data[0].radius
       value: 4
       objectReference: {fileID: 0}
@@ -671,6 +743,10 @@ PrefabInstance:
       propertyPath: checkPoints.Array.data[7].radius
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 523085544885833146, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d990b545c11987248abf210f86b99474, type: 2}
     - target: {fileID: 3891825140608442146, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8
@@ -715,6 +791,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Car
       objectReference: {fileID: 0}
+    - target: {fileID: 5470995206553674478, guid: 109c813b5735c32419ad2cfd4e420446, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -734,7 +814,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4806349261181287560, guid: bb07f3e708ce01b49bc1c79c4411c9bb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -16.06
+      value: -11.37
       objectReference: {fileID: 0}
     - target: {fileID: 4806349261181287560, guid: bb07f3e708ce01b49bc1c79c4411c9bb, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1852,7 +1932,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4806349261181287560, guid: bb07f3e708ce01b49bc1c79c4411c9bb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.61
+      value: -3.87
       objectReference: {fileID: 0}
     - target: {fileID: 4806349261181287560, guid: bb07f3e708ce01b49bc1c79c4411c9bb, type: 3}
       propertyPath: m_LocalPosition.y

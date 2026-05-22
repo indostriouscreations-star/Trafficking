@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class TrafficCheckPoint
+public class TrafficCheckZone
 {
     public Transform point;
     public float radius = 2f;
@@ -14,23 +14,20 @@ public class CarDrive : MonoBehaviour
     public float speed = 5f;
     public float rotationSpeed = 5f;
 
-    [Header("Sprawdzanie ruchu")]
-    public List<TrafficCheckPoint> checkPoints = new List<TrafficCheckPoint>();
-
-    [Tooltip("Warstwa samochodów")]
+    [Header("Warstwa aut")]
     public LayerMask carLayer;
 
-    [Tooltip("Odległość raycasta przed autem")]
+    [Header("Raycast")]
     public float rayDistance = 3f;
-
-    [Tooltip("Dystans zatrzymania od auta")]
     public float stopDistance = 1.5f;
 
-    [Header("Punkt aktywacji sprawdzania")]
-    public Transform checkTriggerPoint;
+    [Header("Niebieskie kółko - aktywacja")]
+    public Transform triggerPoint;
+    public float triggerRadius = 3f;
 
-    [Tooltip("Odległość od triggera, przy której zaczyna sprawdzać skrzyżowanie")]
-    public float triggerDistance = 3f;
+    [Header("Żółte kółka - sprawdzanie")]
+    public List<TrafficCheckZone> checkZones =
+        new List<TrafficCheckZone>();
 
     private Transform[] route;
     private int currentPoint = 0;
@@ -44,53 +41,62 @@ public class CarDrive : MonoBehaviour
 
     void Update()
     {
-        // Brak trasy
         if (route == null || route.Length == 0)
             return;
 
         blocked = false;
 
         //--------------------------------
-        // SPRAWDZANIE STREF
+        // CZY AUTO JEST W NIEBIESKIM KÓŁKU
         //--------------------------------
 
-        if (checkTriggerPoint != null)
+        bool insideTrigger = false;
+
+        if (triggerPoint != null)
         {
             float distToTrigger =
-                Vector3.Distance(transform.position, checkTriggerPoint.position);
+                Vector3.Distance(
+                    transform.position,
+                    triggerPoint.position
+                );
 
-            // Sprawdzaj dopiero blisko triggera
-            if (distToTrigger <= triggerDistance)
+            insideTrigger = distToTrigger <= triggerRadius;
+        }
+
+        //--------------------------------
+        // JEŚLI TAK -> SPRAWDZAJ ŻÓŁTE
+        //--------------------------------
+
+        if (insideTrigger)
+        {
+            foreach (var zone in checkZones)
             {
-                foreach (var check in checkPoints)
+                if (zone.point == null)
+                    continue;
+
+                Collider[] hits = Physics.OverlapSphere(
+                    zone.point.position,
+                    zone.radius,
+                    carLayer
+                );
+
+                foreach (var col in hits)
                 {
-                    if (check.point == null)
-                        continue;
-
-                    Collider[] hits = Physics.OverlapSphere(
-                        check.point.position,
-                        check.radius,
-                        carLayer
-                    );
-
-                    foreach (var colliderHit in hits)
+                    // ignoruj siebie
+                    if (col.transform != transform)
                     {
-                        // Ignoruj samego siebie
-                        if (colliderHit.transform != transform)
-                        {
-                            blocked = true;
-                            break;
-                        }
-                    }
-
-                    if (blocked)
+                        blocked = true;
                         break;
+                    }
                 }
+
+                if (blocked)
+                    break;
             }
         }
 
         //--------------------------------
-        // RAYCAST DO PRZODU
+        // RAYCAST PRZÓD
         //--------------------------------
 
         Ray ray = new Ray(
@@ -100,10 +106,8 @@ public class CarDrive : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit rayHit, rayDistance, carLayer))
         {
-            // Ignoruj samego siebie
             if (rayHit.transform != transform)
             {
-                // Zatrzymaj jeśli za blisko
                 if (rayHit.distance <= stopDistance)
                 {
                     blocked = true;
@@ -119,7 +123,7 @@ public class CarDrive : MonoBehaviour
             return;
 
         //--------------------------------
-        // STANDARDOWA JAZDA
+        // RUCH
         //--------------------------------
 
         Transform targetPoint = route[currentPoint];
@@ -127,7 +131,6 @@ public class CarDrive : MonoBehaviour
         Vector3 direction =
             (targetPoint.position - transform.position).normalized;
 
-        // Obrót auta
         if (direction != Vector3.zero)
         {
             Quaternion lookRotation =
@@ -140,22 +143,26 @@ public class CarDrive : MonoBehaviour
             );
         }
 
-        // Ruch auta
         transform.position = Vector3.MoveTowards(
             transform.position,
             targetPoint.position,
             speed * Time.deltaTime
         );
 
-        // Sprawdzenie dojazdu do punktu
+        //--------------------------------
+        // NASTĘPNY PUNKT
+        //--------------------------------
+
         float distance =
-            Vector3.Distance(transform.position, targetPoint.position);
+            Vector3.Distance(
+                transform.position,
+                targetPoint.position
+            );
 
         if (distance < 0.2f)
         {
             currentPoint++;
 
-            // Koniec trasy
             if (currentPoint >= route.Length)
             {
                 Destroy(gameObject);
@@ -169,32 +176,32 @@ public class CarDrive : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        // Punkty sprawdzania
-        Gizmos.color = Color.yellow;
-
-        foreach (var check in checkPoints)
-        {
-            if (check.point == null)
-                continue;
-
-            Gizmos.DrawWireSphere(
-                check.point.position,
-                check.radius
-            );
-        }
-
-        // Trigger point
-        if (checkTriggerPoint != null)
+        // NIEBIESKIE
+        if (triggerPoint != null)
         {
             Gizmos.color = Color.cyan;
 
             Gizmos.DrawWireSphere(
-                checkTriggerPoint.position,
-                triggerDistance
+                triggerPoint.position,
+                triggerRadius
             );
         }
 
-        // Raycast
+        // ŻÓŁTE
+        Gizmos.color = Color.yellow;
+
+        foreach (var zone in checkZones)
+        {
+            if (zone.point == null)
+                continue;
+
+            Gizmos.DrawWireSphere(
+                zone.point.position,
+                zone.radius
+            );
+        }
+
+        // RAYCAST
         Gizmos.color = Color.red;
 
         Vector3 start =
