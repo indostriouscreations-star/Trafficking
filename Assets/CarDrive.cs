@@ -25,7 +25,7 @@ public class CarDrive : MonoBehaviour
     public Transform triggerPoint;
     public float triggerRadius = 3f;
 
-    [Header("Żółte kółka - sprawdzanie")]
+    [Header("Zielone kółka - sprawdzanie")]
     public List<TrafficCheckZone> checkZones =
         new List<TrafficCheckZone>();
 
@@ -41,6 +41,10 @@ public class CarDrive : MonoBehaviour
 
     void Update()
     {
+        //--------------------------------
+        // BRAK TRASY
+        //--------------------------------
+
         if (route == null || route.Length == 0)
             return;
 
@@ -64,7 +68,7 @@ public class CarDrive : MonoBehaviour
         }
 
         //--------------------------------
-        // JEŚLI TAK -> SPRAWDZAJ ŻÓŁTE
+        // JEŚLI TAK -> SPRAWDZAJ ZIELONE
         //--------------------------------
 
         if (insideTrigger)
@@ -82,8 +86,12 @@ public class CarDrive : MonoBehaviour
 
                 foreach (var col in hits)
                 {
-                    // ignoruj siebie
-                    if (col.transform != transform)
+                    // Znajdź CarDrive w parentach
+                    CarDrive otherCar =
+                        col.GetComponentInParent<CarDrive>();
+
+                    // Ignoruj siebie
+                    if (otherCar != null && otherCar != this)
                     {
                         blocked = true;
                         break;
@@ -96,7 +104,7 @@ public class CarDrive : MonoBehaviour
         }
 
         //--------------------------------
-        // RAYCAST PRZÓD
+        // RAYCAST DO PRZODU
         //--------------------------------
 
         Ray ray = new Ray(
@@ -106,8 +114,13 @@ public class CarDrive : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit rayHit, rayDistance, carLayer))
         {
-            if (rayHit.transform != transform)
+            CarDrive otherCar =
+                rayHit.collider.GetComponentInParent<CarDrive>();
+
+            // Jeśli to inne auto
+            if (otherCar != null && otherCar != this)
             {
+                // Za blisko -> stop
                 if (rayHit.distance <= stopDistance)
                 {
                     blocked = true;
@@ -123,13 +136,17 @@ public class CarDrive : MonoBehaviour
             return;
 
         //--------------------------------
-        // RUCH
+        // STANDARDOWA JAZDA
         //--------------------------------
 
         Transform targetPoint = route[currentPoint];
 
         Vector3 direction =
             (targetPoint.position - transform.position).normalized;
+
+        //--------------------------------
+        // OBRÓT
+        //--------------------------------
 
         if (direction != Vector3.zero)
         {
@@ -142,6 +159,10 @@ public class CarDrive : MonoBehaviour
                 rotationSpeed * Time.deltaTime
             );
         }
+
+        //--------------------------------
+        // RUCH
+        //--------------------------------
 
         transform.position = Vector3.MoveTowards(
             transform.position,
@@ -163,6 +184,10 @@ public class CarDrive : MonoBehaviour
         {
             currentPoint++;
 
+            //--------------------------------
+            // KONIEC TRASY
+            //--------------------------------
+
             if (currentPoint >= route.Length)
             {
                 Destroy(gameObject);
@@ -176,7 +201,10 @@ public class CarDrive : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        // NIEBIESKIE
+        //--------------------------------
+        // NIEBIESKIE KÓŁKO
+        //--------------------------------
+
         if (triggerPoint != null)
         {
             Gizmos.color = Color.cyan;
@@ -187,8 +215,11 @@ public class CarDrive : MonoBehaviour
             );
         }
 
-        // ŻÓŁTE
-        Gizmos.color = Color.yellow;
+        //--------------------------------
+        // ZIELONE KÓŁKA
+        //--------------------------------
+
+        Gizmos.color = Color.green;
 
         foreach (var zone in checkZones)
         {
@@ -201,7 +232,10 @@ public class CarDrive : MonoBehaviour
             );
         }
 
+        //--------------------------------
         // RAYCAST
+        //--------------------------------
+
         Gizmos.color = Color.red;
 
         Vector3 start =
